@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI/UX Portfolio — Maryam Seher</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#020617;--bg2:#0F172A;
+  --text:#F1F5F9;--muted:#64748B;--subtle:#334155;
+  --accent:#38BDF8;--green:#22C55E;--purple:#A78BFA;
+  --border:rgba(248,250,252,0.06);--border-h:rgba(56,189,248,0.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column}
+canvas#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.pattern{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:radial-gradient(circle,rgba(248,250,252,0.025) 1px,transparent 1px);background-size:32px 32px}
+.wrap{position:relative;z-index:10;flex:1;display:flex;flex-direction:column}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.8rem 4rem;border-bottom:1px solid var(--border);backdrop-filter:blur(24px);position:sticky;top:0;z-index:100}
+.logo{font-family:'Instrument Serif',serif;font-size:1.4rem;font-style:italic;color:var(--text);text-decoration:none}
+.logo span{color:var(--accent)}
+.back-btn{display:flex;align-items:center;gap:0.6rem;color:var(--muted);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;transition:color 0.2s;border:1px solid var(--border);padding:0.6rem 1.2rem;border-radius:8px}
+.back-btn:hover{color:var(--accent);border-color:var(--border-h)}
+
+/* MAIN STAGE */
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 4rem;text-align:center;position:relative;min-height:80vh}
+
+/* FLOATING DESIGN ELEMENTS */
+.floaters{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.floater{position:absolute;border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(4px);background:rgba(15,23,42,0.6)}
+
+.f1{width:180px;height:100px;top:12%;left:6%;animation:float1 7s ease-in-out infinite;padding:1rem}
+.f2{width:140px;height:80px;top:20%;right:8%;animation:float2 9s ease-in-out infinite 1s;padding:0.9rem}
+.f3{width:120px;height:120px;bottom:20%;left:10%;animation:float1 8s ease-in-out infinite 2s;padding:1rem;border-radius:50%}
+.f4{width:160px;height:90px;bottom:18%;right:6%;animation:float2 6s ease-in-out infinite 0.5s;padding:0.9rem}
+.f5{width:80px;height:80px;top:50%;left:3%;animation:float1 10s ease-in-out infinite 3s;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.f6{width:80px;height:80px;top:40%;right:3%;animation:float2 8s ease-in-out infinite 1.5s;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+
+@keyframes float1{0%,100%{transform:translateY(0px) rotate(-1deg)}50%{transform:translateY(-18px) rotate(1deg)}}
+@keyframes float2{0%,100%{transform:translateY(0px) rotate(1deg)}50%{transform:translateY(-14px) rotate(-1deg)}}
+
+/* Wireframe mock inside floaters */
+.wf-bar{height:6px;border-radius:3px;background:var(--border-h);margin-bottom:6px}
+.wf-bar.accent{background:rgba(56,189,248,0.35);width:60%}
+.wf-bar.short{width:40%}
+.wf-bar.med{width:75%}
+.wf-circle{width:32px;height:32px;border-radius:50%;background:rgba(56,189,248,0.12);border:1px solid var(--border-h);float:left;margin-right:8px;margin-top:-4px}
+.wf-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;height:70px}
+.wf-block{border-radius:4px;background:rgba(248,250,252,0.04);border:1px solid var(--border)}
+.wf-block.hi{background:rgba(56,189,248,0.08);border-color:rgba(56,189,248,0.2)}
+.wf-label{font-family:'JetBrains Mono',monospace;font-size:0.42rem;letter-spacing:0.12em;color:var(--subtle);text-transform:uppercase;margin-bottom:6px}
+
+/* CONSTRUCTION BADGE */
+.uc-badge{display:inline-flex;align-items:center;gap:0.7rem;padding:0.5rem 1.4rem;border:1px solid rgba(167,139,250,0.35);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;color:var(--purple);text-transform:uppercase;margin-bottom:2.5rem;background:rgba(167,139,250,0.05)}
+.uc-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);box-shadow:0 0 10px var(--purple);animation:badgePulse 2s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+
+/* HEADLINE */
+.uc-headline{font-family:'DM Sans',sans-serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:200;letter-spacing:-0.03em;line-height:1.05;margin-bottom:1.5rem;max-width:800px}
+.uc-headline em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent)}
+
+/* BLUEPRINT ILLUSTRATION */
+.blueprint{width:min(480px,90vw);margin:3rem auto;position:relative}
+.bp-outer{border:1px solid rgba(56,189,248,0.15);border-radius:20px;padding:2rem;background:rgba(15,23,42,0.7);backdrop-filter:blur(12px);position:relative;overflow:hidden}
+.bp-corner{position:absolute;width:16px;height:16px;border-color:var(--accent);border-style:solid;opacity:0.5}
+.bp-corner.tl{top:10px;left:10px;border-width:2px 0 0 2px}
+.bp-corner.tr{top:10px;right:10px;border-width:2px 2px 0 0}
+.bp-corner.bl{bottom:10px;left:10px;border-width:0 0 2px 2px}
+.bp-corner.br{bottom:10px;right:10px;border-width:0 2px 2px 0}
+.bp-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:1.5rem;opacity:0.7}
+.bp-screens{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:0.8rem;align-items:end}
+.bp-screen{border-radius:8px;border:1px solid rgba(56,189,248,0.12);background:rgba(56,189,248,0.03);overflow:hidden;position:relative}
+.bp-screen-bar{height:6px;background:rgba(56,189,248,0.15);margin-bottom:5px}
+.bp-screen-bar.a{width:70%;background:rgba(56,189,248,0.3)}
+.bp-screen-body{padding:6px 8px}
+.bp-screen-line{height:4px;border-radius:2px;background:rgba(248,250,252,0.06);margin-bottom:4px}
+.bp-screen-line.accent{background:rgba(56,189,248,0.2);width:55%}
+.bp-screen-line.short{width:40%}
+.bp-s1{height:90px}
+.bp-s2{height:130px;border-color:rgba(56,189,248,0.25);background:rgba(56,189,248,0.05)}
+.bp-s3{height:90px}
+.bp-scan{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(56,189,248,0.06) 50%,transparent 100%);height:30%;animation:scan 3s ease-in-out infinite;pointer-events:none}
+@keyframes scan{0%{top:-30%}100%{top:130%}}
+.bp-progress{margin-top:1.5rem}
+.bp-prog-label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-bottom:0.6rem}
+.bp-prog-track{height:3px;background:rgba(248,250,252,0.06);border-radius:2px;overflow:hidden}
+.bp-prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:2px;animation:progFill 2s cubic-bezier(0.16,1,0.3,1) 0.8s forwards}
+@keyframes progFill{to{width:42%}}
+
+/* DESCRIPTION */
+.uc-desc{font-size:1rem;color:var(--muted);line-height:1.9;max-width:540px;margin:0 auto 1rem}
+.uc-desc strong{color:var(--text);font-weight:400}
+
+/* WHAT'S COMING PILLS */
+.coming-pills{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin:2.5rem 0}
+.cp{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1.1rem;border:1px solid var(--border);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;transition:all 0.2s}
+.cp:hover{border-color:rgba(56,189,248,0.25);color:var(--accent)}
+.cp-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* NOTIFY CTA */
+.notify-wrap{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.btn-notify{padding:0.9rem 2.2rem;background:var(--accent);color:#020617;font-family:'DM Sans',sans-serif;font-weight:400;font-size:0.85rem;border:none;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity 0.2s}
+.btn-notify:hover{opacity:0.85}
+.btn-email{padding:0.9rem 2.2rem;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;font-size:0.85rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:border-color 0.2s}
+.btn-email:hover{border-color:var(--border-h)}
+
+footer{text-align:center;padding:2rem 4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;color:var(--subtle);text-transform:uppercase;border-top:1px solid var(--border)}
+
+@media(max-width:900px){
+  nav,.stage,footer{padding-left:1.5rem;padding-right:1.5rem}
+  .f1,.f2,.f3,.f4,.f5,.f6{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="pattern"></div>
+<div class="wrap">
+
+<nav>
+  <a class="logo" href="maryam_portfolio.html">Maryam <span>Seher</span></a>
+  <a class="back-btn" href="maryam_portfolio.html">← Back to Portfolio</a>
+</nav>
+
+<div class="stage">
+
+  <!-- Floating wireframe elements -->
+  <div class="floaters">
+    <div class="floater f1">
+      <div class="wf-label">Nav component</div>
+      <div class="wf-circle"></div>
+      <div class="wf-bar accent" style="margin-left:40px;margin-top:4px"></div>
+      <div class="wf-bar short" style="margin-left:40px"></div>
+    </div>
+    <div class="floater f2">
+      <div class="wf-label">Hero card</div>
+      <div class="wf-bar accent"></div>
+      <div class="wf-bar med"></div>
+      <div class="wf-bar short"></div>
+    </div>
+    <div class="floater f3">
+      <div class="wf-grid">
+        <div class="wf-block hi"></div>
+        <div class="wf-block"></div>
+        <div class="wf-block"></div>
+        <div class="wf-block hi"></div>
+      </div>
+    </div>
+    <div class="floater f4">
+      <div class="wf-label">Dashboard</div>
+      <div class="wf-bar accent"></div>
+      <div class="wf-bar"></div>
+      <div class="wf-bar med"></div>
+    </div>
+    <div class="floater f5">🎨</div>
+    <div class="floater f6">✦</div>
+  </div>
+
+  <!-- Badge -->
+  <div class="uc-badge">
+    <span class="uc-badge-dot"></span>
+    Crafting something beautiful
+  </div>
+
+  <!-- Headline -->
+  <h1 class="uc-headline">
+    Exciting UI/UX<br>Case Studies <em>Coming Soon</em>
+  </h1>
+
+  <!-- Blueprint illustration -->
+  <div class="blueprint">
+    <div class="bp-outer">
+      <div class="bp-corner tl"></div>
+      <div class="bp-corner tr"></div>
+      <div class="bp-corner bl"></div>
+      <div class="bp-corner br"></div>
+      <div class="bp-label">// design_system.figma — in progress</div>
+      <div class="bp-screens">
+        <div class="bp-screen bp-s1">
+          <div class="bp-scan"></div>
+          <div style="padding:8px">
+            <div class="bp-screen-bar"></div>
+            <div class="bp-screen-body">
+              <div class="bp-screen-line accent"></div>
+              <div class="bp-screen-line"></div>
+              <div class="bp-screen-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bp-screen bp-s2">
+          <div class="bp-scan"></div>
+          <div style="padding:8px">
+            <div class="bp-screen-bar a"></div>
+            <div class="bp-screen-body">
+              <div class="bp-screen-line accent"></div>
+              <div class="bp-screen-line"></div>
+              <div class="bp-screen-line"></div>
+              <div class="bp-screen-line short"></div>
+              <div class="bp-screen-line"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bp-screen bp-s3">
+          <div class="bp-scan"></div>
+          <div style="padding:8px">
+            <div class="bp-screen-bar"></div>
+            <div class="bp-screen-body">
+              <div class="bp-screen-line accent"></div>
+              <div class="bp-screen-line short"></div>
+              <div class="bp-screen-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bp-progress">
+        <div class="bp-prog-label"><span>Building case studies</span><span>42%</span></div>
+        <div class="bp-prog-track"><div class="bp-prog-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <p class="uc-desc">
+    New <strong>UI/UX projects and case studies</strong> are being carefully documented and will be added soon. Each project will include research, wireframes, prototypes, and final designs — crafted to show the <strong>full design thinking process</strong>, not just the pretty screens.
+  </p>
+
+  <!-- What's coming pills -->
+  <div class="coming-pills">
+    <div class="cp"><span class="cp-dot"></span>Mobile App Design</div>
+    <div class="cp"><span class="cp-dot"></span>Web Dashboards</div>
+    <div class="cp"><span class="cp-dot"></span>SaaS Interfaces</div>
+    <div class="cp"><span class="cp-dot"></span>Design Systems</div>
+    <div class="cp"><span class="cp-dot"></span>Case Studies</div>
+    <div class="cp"><span class="cp-dot"></span>Prototypes</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="notify-wrap">
+    <a class="btn-notify" href="https://wa.me/923390007149" target="_blank">Get notified on WhatsApp</a>
+    <a class="btn-email" href="mailto:maryamse438@gmail.com">Email me instead</a>
+  </div>
+
+</div>
+
+<footer>UI/UX Portfolio · Maryam Seher · NUTECH Islamabad 🇵🇰 · Case studies dropping soon</footer>
+</div>
+
+<script>
+// BG CANVAS
+const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const stars=Array.from({length:100},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.2+0.2,a:Math.random()*Math.PI*2,da:Math.random()*0.003+0.001,vy:Math.random()*0.0001+0.00003}));
+const nebulas=[{x:0.2,y:0.3,r:0.3,c:'167,139,250'},{x:0.8,y:0.7,r:0.28,c:'56,189,248'}];
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  nebulas.forEach(n=>{const g=ctx.createRadialGradient(n.x*W,n.y*H,0,n.x*W,n.y*H,n.r*Math.min(W,H));g.addColorStop(0,`rgba(${n.c},0.05)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});
+  stars.forEach(s=>{s.a+=s.da;s.y-=s.vy;if(s.y<0)s.y=1;const alpha=0.1+0.4*Math.abs(Math.sin(s.a));ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(241,245,249,${alpha})`;ctx.fill()});
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>

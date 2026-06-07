@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Design Portfolio — Maryam Seher</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#020617;--bg2:#0F172A;
+  --text:#F1F5F9;--muted:#64748B;--subtle:#334155;
+  --accent:#38BDF8;--green:#22C55E;
+  --border:rgba(248,250,252,0.06);--border-h:rgba(56,189,248,0.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;min-height:100vh}
+canvas#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.pattern{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:radial-gradient(circle,rgba(248,250,252,0.025) 1px,transparent 1px);background-size:32px 32px}
+.wrap{position:relative;z-index:10}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.8rem 4rem;border-bottom:1px solid var(--border);backdrop-filter:blur(24px);position:sticky;top:0;z-index:100}
+.logo{font-family:'Instrument Serif',serif;font-size:1.4rem;font-style:italic;color:var(--text);text-decoration:none}
+.logo span{color:var(--accent)}
+.back-btn{display:flex;align-items:center;gap:0.6rem;color:var(--muted);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;transition:color 0.2s;border:1px solid var(--border);padding:0.6rem 1.2rem;border-radius:8px}
+.back-btn:hover{color:var(--accent);border-color:var(--border-h)}
+
+/* HERO */
+.hero{padding:6rem 4rem 4rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:0.6rem;padding:0.4rem 1.2rem;border:1px solid var(--border-h);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:2rem}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.hero h1{font-family:'DM Sans',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:200;letter-spacing:-0.03em;line-height:1.05;margin-bottom:1rem}
+.hero h1 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent)}
+.hero p{font-size:1rem;color:var(--muted);max-width:520px;margin:0 auto 1rem;line-height:1.9;font-weight:300}
+.hero-stats{display:flex;justify-content:center;gap:3rem;margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid var(--border)}
+.hstat-val{font-family:'Instrument Serif',serif;font-size:2.5rem;font-style:italic;color:var(--accent);display:block;line-height:1}
+.hstat-lbl{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-top:0.3rem}
+
+/* FILTERS */
+.filters{display:flex;justify-content:center;gap:0.8rem;flex-wrap:wrap;padding:2rem 4rem;border-bottom:1px solid var(--border)}
+.filter-btn{padding:0.5rem 1.3rem;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border-radius:100px;transition:all 0.2s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(56,189,248,0.06)}
+
+/* GALLERY — 4 col grid */
+.gallery-wrap{padding:3rem 5rem 6rem;max-width:1600px;margin:0 auto}
+.gallery-count{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:2rem}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.gallery-item{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--border);cursor:pointer;transition:all 0.35s cubic-bezier(0.16,1,0.3,1);background:var(--bg2)}
+.gallery-item:hover{border-color:var(--border-h);transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,0.6),0 0 0 1px rgba(56,189,248,0.1)}
+.gallery-item-thumb{width:100%;aspect-ratio:9/14;overflow:hidden}
+.gallery-item-thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1)}
+.gallery-item:hover .gallery-item-thumb img{transform:scale(1.05)}
+.gallery-item-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(2,6,23,0.97) 0%,rgba(2,6,23,0.3) 55%,transparent 100%);opacity:0;transition:opacity 0.3s;display:flex;flex-direction:column;justify-content:flex-end;padding:1.4rem}
+.gallery-item:hover .gallery-item-overlay{opacity:1}
+.overlay-cat{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:0.3rem}
+.overlay-label{font-size:0.82rem;font-weight:300;color:var(--text);line-height:1.4}
+.gallery-item-footer{padding:0.9rem 1rem 1rem;border-top:1px solid var(--border)}
+.gif-label{font-size:0.75rem;color:var(--muted);font-weight:300;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gif-cat{font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:var(--subtle);text-transform:uppercase;margin-top:0.2rem}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:999;background:rgba(2,6,23,0.97);display:none;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(20px)}
+.lightbox.open{display:flex}
+.lb-inner{position:relative;max-width:700px;width:100%;max-height:90vh;display:flex;flex-direction:column;gap:1rem}
+.lb-img{width:100%;max-height:78vh;object-fit:contain;border-radius:10px;border:1px solid var(--border)}
+.lb-meta{display:flex;justify-content:space-between;align-items:center}
+.lb-label{font-size:0.9rem;color:var(--text);font-weight:300}
+.lb-cat{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase}
+.lb-close{position:absolute;top:-3rem;right:0;background:none;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;padding:0.5rem 1rem;border-radius:6px;transition:all 0.2s}
+.lb-close:hover{color:var(--accent);border-color:var(--border-h)}
+.lb-nav{display:flex;gap:0.8rem;justify-content:center}
+.lb-nav button{padding:0.6rem 1.5rem;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;border-radius:6px;transition:all 0.2s}
+.lb-nav button:hover{color:var(--accent);border-color:var(--border-h)}
+
+/* CTA */
+.cta-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 4rem;text-align:center}
+.cta-strip h2{font-family:'DM Sans',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:200;letter-spacing:-0.02em;margin-bottom:1rem}
+.cta-strip h2 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent)}
+.cta-strip p{font-size:0.95rem;color:var(--muted);margin-bottom:2.5rem;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.9}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-a{padding:0.9rem 2.2rem;background:var(--accent);color:#020617;font-family:'DM Sans',sans-serif;font-weight:400;font-size:0.85rem;border:none;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity 0.2s}
+.btn-a:hover{opacity:0.85}
+.btn-b{padding:0.9rem 2.2rem;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;font-size:0.85rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:border-color 0.2s}
+.btn-b:hover{border-color:var(--border-h)}
+
+footer{text-align:center;padding:2rem 4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;color:var(--subtle);text-transform:uppercase}
+
+@media(max-width:1200px){.gallery{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){
+  nav,.hero,.filters,.cta-strip,footer{padding-left:1.5rem;padding-right:1.5rem}
+  .gallery-wrap{padding:2rem 1.5rem 4rem}
+  .gallery{grid-template-columns:repeat(2,1fr);gap:1rem}
+  .hero-stats{gap:1.5rem}
+}
+@media(max-width:480px){
+  .gallery{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="pattern"></div>
+<div class="wrap">
+
+<nav>
+  <a class="logo" href="maryam_portfolio_enhanced.html">Maryam <span>Seher</span></a>
+  <a class="back-btn" href="maryam_portfolio_enhanced.html">← Back to Portfolio</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Email Design Portfolio</div>
+  <h1>Crafting emails that<br><em>convert &amp; captivate</em></h1>
+  <p>High-converting email templates for DTC brands, e-commerce, and service businesses. Every layout built with purpose in Figma.</p>
+  <div class="hero-stats">
+    <div><span class="hstat-val">300+</span><div class="hstat-lbl">Designs</div></div>
+    <div><span class="hstat-val">10+</span><div class="hstat-lbl">Brands</div></div>
+    <div><span class="hstat-val">7</span><div class="hstat-lbl">Categories</div></div>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all',this)">All</button>
+  <button class="filter-btn" onclick="filter('Welcome',this)">Welcome</button>
+  <button class="filter-btn" onclick="filter('E-commerce',this)">E-commerce</button>
+  <button class="filter-btn" onclick="filter('Service',this)">Service</button>
+  <button class="filter-btn" onclick="filter('Brand',this)">Brand</button>
+  <button class="filter-btn" onclick="filter('Hospitality',this)">Hospitality</button>
+  <button class="filter-btn" onclick="filter('Lifestyle',this)">Lifestyle</button>
+  <button class="filter-btn" onclick="filter('Promotional',this)">Promotional</button>
+</div>
+
+<div class="gallery-wrap">
+  <p class="gallery-count" id="gallery-count"></p>
+  <div class="gallery" id="gallery"></div>
+</div>
+
+<div class="cta-strip">
+  <h2>Like what you see?<br><em>Let's work together.</em></h2>
+  <p>I design email templates that look stunning and drive results — for brands that take their inbox seriously.</p>
+  <div class="cta-btns">
+    <a class="btn-a" href="mailto:maryamse438@gmail.com">Hire me for email design</a>
+    <a class="btn-b" href="https://wa.me/923390007149" target="_blank">WhatsApp me</a>
+  </div>
+</div>
+
+<footer>Email Design Portfolio · Maryam Seher · NUTECH Islamabad 🇵🇰</footer>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLB(event)">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()">✕ Close</button>
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <div class="lb-meta">
+      <span class="lb-label" id="lb-label"></span>
+      <span class="lb-cat" id="lb-cat"></span>
+    </div>
+    <div class="lb-nav">
+      <button onclick="lbNav(-1)">← Prev</button>
+      <button onclick="lbNav(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DESIGNS = [
+  {src:'emaildesigns/2026_ 1st.png',label:'2026  1st',cat:'Lifestyle'},
+  {src:'emaildesigns/Dec 1st_.png',label:'Dec 1st',cat:'Lifestyle'},
+  {src:'emaildesigns/Dec 2nd_.png',label:'Dec 2nd',cat:'Lifestyle'},
+  {src:'emaildesigns/Frame 1.png',label:'Frame 1',cat:'Brand'},
+  {src:'emaildesigns/Frame 1618872651.png',label:'Frame 1618872651',cat:'Welcome'},
+  {src:'emaildesigns/Frame 1618872652.png',label:'Frame 1618872652',cat:'Welcome'},
+  {src:'emaildesigns/Frame 1618872653.png',label:'Frame 1618872653',cat:'Welcome'},
+  {src:'emaildesigns/Frame 1618872655.png',label:'Frame 1618872655',cat:'Brand'},
+  {src:'emaildesigns/Frame 1618872656.png',label:'Frame 1618872656',cat:'Brand'},
+  {src:'emaildesigns/Frame 1618872657.png',label:'Frame 1618872657',cat:'Brand'},
+  {src:'emaildesigns/Frame 1618872658.png',label:'Frame 1618872658',cat:'Brand'},
+  {src:'emaildesigns/Frame 1618872660.png',label:'Frame 1618872660',cat:'Brand'},
+  {src:'emaildesigns/Frame 2.png',label:'Frame 2',cat:'Promotional'},
+  {src:'emaildesigns/Frame 2147259371.png',label:'Frame 2147259371',cat:'Promotional'},
+  {src:'emaildesigns/Frame 2147259412.png',label:'Frame 2147259412',cat:'Promotional'},
+  {src:'emaildesigns/Frame 27113.png',label:'Frame 27113',cat:'Promotional'},
+  {src:'emaildesigns/Frame 3.png',label:'Frame 3',cat:'Promotional'},
+  {src:'emaildesigns/Frame 4.png',label:'Frame 4',cat:'Promotional'},
+  {src:'emaildesigns/Frame 5.png',label:'Frame 5',cat:'Promotional'},
+  {src:'emaildesigns/Frame 6.png',label:'Frame 6',cat:'Welcome'},
+  {src:'emaildesigns/Frame 7.png',label:'Frame 7',cat:'Welcome'},
+  {src:'emaildesigns/Frame 770929.png',label:'Frame 770929',cat:'Welcome'},
+  {src:'emaildesigns/Frame 8.png',label:'Frame 8',cat:'Welcome'},
+  {src:'emaildesigns/Haloween_.png',label:'Haloween',cat:'Lifestyle'},
+  {src:'emaildesigns/It#U2019s been a while since we#U2019ve seen you around .We were just wondering#U2026 what#U2019s been keeping you away_.png',label:'It U2019s been a while since we U2019ve seen you around .We were just wondering U2026 what U2019s been keeping you away',cat:'Lifestyle'},
+  {src:'emaildesigns/Morning Rituals That Change Your Energy.png',label:'Morning Rituals That Change Your Energy',cat:'Lifestyle'},
+  {src:'emaildesigns/Welcome 6.png',label:'Welcome 6',cat:'Welcome'},
+  {src:'emaildesigns/Welcome 7.png',label:'Welcome 7',cat:'Welcome'},
+  {src:'emaildesigns/Your body might be asking for minerals..png',label:'Your body might be asking for minerals.',cat:'Lifestyle'},
+  {src:'emaildesigns/ajc jewllers.png',label:'ajc jewllers',cat:'Brand'},
+  {src:'emaildesigns/dallas and parkway cleaner.png',label:'dallas and parkway cleaner',cat:'Service'},
+  {src:'emaildesigns/davenstyle.png',label:'davenstyle',cat:'Brand'},
+  {src:'emaildesigns/easthill 4.jpg',label:'easthill 4',cat:'Hospitality'},
+  {src:'emaildesigns/easthill email5.jpg',label:'easthill email5',cat:'Hospitality'},
+  {src:'emaildesigns/email 3.png',label:'email 3',cat:'Brand'},
+  {src:'emaildesigns/email 4_ Prehype BFCM.png',label:'email 4  Prehype BFCM',cat:'Promotional'},
+  {src:'emaildesigns/email5.png',label:'email5',cat:'Brand'},
+  {src:'emaildesigns/faris.png',label:'faris',cat:'Brand'},
+  {src:'emaildesigns/fisman dry cleaming.png',label:'fisman dry cleaming',cat:'Service'},
+  {src:'emaildesigns/guestway version1.png',label:'guestway version1',cat:'Brand'},
+  {src:'emaildesigns/huestway version 2.png',label:'huestway version 2',cat:'Brand'},
+  {src:'emaildesigns/momclub.png',label:'momclub',cat:'Brand'},
+  {src:'emaildesigns/mr eatwell.png',label:'mr eatwell',cat:'Brand'},
+  {src:'emaildesigns/nydration 1.png',label:'nydration 1',cat:'Brand'},
+  {src:'emaildesigns/nydration 2.png',label:'nydration 2',cat:'Brand'},
+  {src:'emaildesigns/nydration 3.png',label:'nydration 3',cat:'Brand'},
+  {src:'emaildesigns/nydration 4.png',label:'nydration 4',cat:'Brand'},
+  {src:'emaildesigns/nydration 6.png',label:'nydration 6',cat:'Brand'},
+  {src:'emaildesigns/nydration 7.png',label:'nydration 7',cat:'Brand'},
+  {src:'emaildesigns/nydration 8.png',label:'nydration 8',cat:'Brand'},
+  {src:'emaildesigns/nydration 9.png',label:'nydration 9',cat:'Brand'},
+  {src:'emaildesigns/parking locker.png',label:'parking locker',cat:'Service'},
+  {src:'emaildesigns/piglet Abandoned Cart email 1.png',label:'piglet Abandoned Cart email 1',cat:'E-commerce'},
+  {src:'emaildesigns/piglet abondon cart email 2.png',label:'piglet abondon cart email 2',cat:'E-commerce'},
+  {src:'emaildesigns/piglet abondon cart email 3.png',label:'piglet abondon cart email 3',cat:'E-commerce'},
+  {src:'emaildesigns/piglet abondon checkout email 1.png',label:'piglet abondon checkout email 1',cat:'E-commerce'},
+  {src:'emaildesigns/piglet abondon checkout email 2.png',label:'piglet abondon checkout email 2',cat:'E-commerce'},
+  {src:'emaildesigns/piglet abondon checkout email 3.png',label:'piglet abondon checkout email 3',cat:'E-commerce'},
+  {src:'emaildesigns/piglet browse abondon email 1.png',label:'piglet browse abondon email 1',cat:'E-commerce'},
+  {src:'emaildesigns/piglet browse abondon email 2.png',label:'piglet browse abondon email 2',cat:'E-commerce'},
+  {src:'emaildesigns/piglet browse abondon email 3.png',label:'piglet browse abondon email 3',cat:'E-commerce'},
+  {src:'emaildesigns/piglet thanku email 1.png',label:'piglet thanku email 1',cat:'E-commerce'},
+  {src:'emaildesigns/piglet thanku email 2.png',label:'piglet thanku email 2',cat:'E-commerce'},
+  {src:'emaildesigns/piglet winback email 1.png',label:'piglet winback email 1',cat:'E-commerce'},
+  {src:'emaildesigns/piglet winback email 2.png',label:'piglet winback email 2',cat:'E-commerce'},
+  {src:'emaildesigns/pigletabondon cart email 2.png',label:'pigletabondon cart email 2',cat:'E-commerce'},
+  {src:'emaildesigns/piglets  winback email 3.png',label:'piglets  winback email 3',cat:'E-commerce'},
+  {src:'emaildesigns/piglets emails.png',label:'piglets emails',cat:'E-commerce'},
+  {src:'emaildesigns/piglets sunsetflow email2.png',label:'piglets sunsetflow email2',cat:'E-commerce'},
+  {src:'emaildesigns/piglets tahnku email 3.png',label:'piglets tahnku email 3',cat:'E-commerce'},
+  {src:'emaildesigns/pigletsabondoned cart email 1.png',label:'pigletsabondoned cart email 1',cat:'E-commerce'},
+  {src:'emaildesigns/river oaks cleaners.png',label:'river oaks cleaners',cat:'Service'},
+  {src:'emaildesigns/tm spice version 2.png',label:'tm spice version 2',cat:'Brand'},
+  {src:'emaildesigns/tm spiceversion 1.png',label:'tm spiceversion 1',cat:'Brand'},
+  {src:'emaildesigns/vervain blanket version 2.png',label:'vervain blanket version 2',cat:'Brand'},
+  {src:'emaildesigns/vervain blanket.png',label:'vervain blanket',cat:'Brand'},
+  {src:'emaildesigns/williams cleaners dry clean.png',label:'williams cleaners dry clean',cat:'Service'},
+  {src:'emaildesigns/zirkel.png',label:'zirkel',cat:'Brand'}
+];
+
+let currentFilter = 'all';
+let currentIdx = 0;
+let visibleItems = [];
+
+function buildGallery() {
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
+  visibleItems = DESIGNS.filter(d => currentFilter === 'all' || d.cat === currentFilter);
+  document.getElementById('gallery-count').textContent =
+    currentFilter === 'all' ? `Showing all ${DESIGNS.length} designs` : `Showing ${visibleItems.length} designs in "${currentFilter}"`;
+
+  visibleItems.forEach((d, i) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `
+      <div class="gallery-item-thumb">
+        <img src="${d.src}" alt="${d.label}" loading="lazy">
+      </div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">${d.cat}</div>
+        <div class="overlay-label">${d.label}</div>
+      </div>
+      <div class="gallery-item-footer">
+        <div class="gif-label">${d.label}</div>
+        <div class="gif-cat">${d.cat}</div>
+      </div>`;
+    item.addEventListener('click', () => openLightbox(i));
+    gallery.appendChild(item);
+  });
+}
+
+function filter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildGallery();
+}
+
+function openLightbox(idx) {
+  currentIdx = idx;
+  const d = visibleItems[idx];
+  document.getElementById('lb-img').src = d.src;
+  document.getElementById('lb-label').textContent = d.label;
+  document.getElementById('lb-cat').textContent = d.cat;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeLB(e) { if(e.target===document.getElementById('lightbox')) closeLightbox(); }
+function lbNav(dir) { currentIdx=(currentIdx+dir+visibleItems.length)%visibleItems.length; openLightbox(currentIdx); }
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') closeLightbox();
+  if(e.key==='ArrowRight') lbNav(1);
+  if(e.key==='ArrowLeft') lbNav(-1);
+});
+
+// BG CANVAS
+const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const stars=Array.from({length:120},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.2+0.2,a:Math.random()*Math.PI*2,da:Math.random()*0.003+0.001,vy:Math.random()*0.0001+0.00003}));
+const nebulas=[{x:0.15,y:0.2,r:0.25,c:'38,189,248'},{x:0.85,y:0.6,r:0.28,c:'124,77,255'}];
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  nebulas.forEach(n=>{const g=ctx.createRadialGradient(n.x*W,n.y*H,0,n.x*W,n.y*H,n.r*Math.min(W,H));g.addColorStop(0,`rgba(${n.c},0.04)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});
+  stars.forEach(s=>{s.a+=s.da;s.y-=s.vy;if(s.y<0)s.y=1;const alpha=0.15+0.45*Math.abs(Math.sin(s.a));ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(241,245,249,${alpha})`;ctx.fill()});
+  requestAnimationFrame(draw);
+}
+draw();
+buildGallery();
+</script>
+</body>
+</html>
